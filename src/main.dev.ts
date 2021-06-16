@@ -31,12 +31,12 @@ if (process.env.NODE_ENV === 'production') {
   sourceMapSupport.install();
 }
 
-if (
-  process.env.NODE_ENV === 'development' ||
-  process.env.DEBUG_PROD === 'true'
-) {
-  require('electron-debug')();
-}
+// if (
+//   process.env.NODE_ENV === 'development' ||
+//   process.env.DEBUG_PROD === 'true'
+// ) {
+//   require('electron-debug')();
+// }
 
 const installExtensions = async () => {
   const installer = require('electron-devtools-installer');
@@ -74,7 +74,10 @@ const createWindow = async () => {
     icon: getAssetPath('icon.png'),
     webPreferences: {
       nodeIntegration: true,
+      zoomFactor: 1,
     },
+    resizable: false,
+    autoHideMenuBar: true,
   });
 
   mainWindow.loadURL(`file://${__dirname}/index.html`);
