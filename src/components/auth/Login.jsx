@@ -1,8 +1,8 @@
 import React, { Fragment, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Container, Typography, CssBaseline } from '@material-ui/core';
+import { Button, Container, Typography } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
-import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
+import { createStyles, makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox';
@@ -35,12 +35,27 @@ const useStyles = makeStyles(() =>
     password: {
       marginTop: '1em',
     },
+    signInRow: {
+      marginTop: '1em',
+    },
+    signInButton: {
+      marginLeft: '.74em',
+    },
+    bottomRow: {
+      position: 'absolute',
+      bottom: '15px',
+    },
+    signUp: {
+      textDecoration: 'none',
+      marginLeft: '24em',
+    },
   })
 );
 
 export default function Login() {
   const classes = useStyles();
-  const [signInDisabled, setSignInDisabled] = useState(true);
+  const [validEmail, setValidEmail] = useState(false);
+  const [validPassword, setValidPassword] = useState(false);
 
   return (
     <>
@@ -63,6 +78,7 @@ export default function Login() {
                   placeholder="Enter your email"
                   variant="outlined"
                   size="small"
+                  onChange={(text) => setValidEmail(text.target.value)}
                   fullWidth
                 />
               </Grid>
@@ -72,20 +88,38 @@ export default function Login() {
                   placeholder="Enter your password"
                   variant="outlined"
                   size="small"
+                  onChange={(text) => setValidPassword(text.target.value)}
                   fullWidth
                   className={classes.password}
                 />
               </Grid>
+              <Grid item xs className={classes.signInRow}>
+                <FormControlLabel
+                  control={<Checkbox color="primary" />}
+                  label="Keep me signed in"
+                />
+                <Button
+                  variant="contained"
+                  disabled={!(validPassword && validEmail)}
+                  className={classes.signInButton}
+                  onClick={createNewWindow}
+                >
+                  Sign in
+                </Button>
+              </Grid>
             </Grid>
           </Grid>
-          <Grid item xs={2}>
-            <Divider orientation="vertical" flexItem />
-          </Grid>
-          <Grid item xs={4} className={classes.grid}>
-            <Grid container direction="column">
-              <Typography>Hi</Typography>
-            </Grid>
-          </Grid>
+        </Grid>
+        <Grid item xs={2}>
+          <Divider orientation="vertical" flexItem />
+        </Grid>
+        <Grid item xs className={classes.bottomRow}>
+          <Button component={Link} to="/">
+            &lt; Back
+          </Button>
+          <Link to="/signup" className={classes.signUp}>
+            Sign Up Free
+          </Link>
         </Grid>
       </div>
     </>
