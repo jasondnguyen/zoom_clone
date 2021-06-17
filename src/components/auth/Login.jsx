@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Container, Typography, CssBaseline } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
@@ -6,6 +6,7 @@ import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox';
+import Divider from '@material-ui/core/Divider';
 
 const createNewWindow = () => {
   const electron = window.require('electron');
@@ -24,93 +25,65 @@ const createNewWindow = () => {
 
 const useStyles = makeStyles(() =>
   createStyles({
-    sign: {
-      fontSize: '28px',
-      fontWeight: 'bold',
-      paddingTop: '20px',
+    signInLogo: {
+      fontSize: '1.75em',
+      fontWeight: '750',
     },
-    back: {
-      display: 'flex',
-      position: 'absolute',
-      bottom: '15px',
-    },
-    email: {
-      borderRadius: '50',
-      paddingTop: '30px',
-      fontSize: '10px',
+    grid: {
+      marginTop: '2em',
     },
     password: {
-      paddingTop: '15px',
-      fontSize: '10px',
-    },
-    signIn: {
-      marginTop: '10px',
-      marginLeft: '30px',
-      position: 'absolute',
+      marginTop: '1em',
     },
   })
 );
 
 export default function Login() {
   const classes = useStyles();
+  const [signInDisabled, setSignInDisabled] = useState(true);
 
   return (
     <>
-      <CssBaseline />
       <div style={{ padding: 20 }}>
-        <Grid container direction="column" justify="center" alignItems="center">
-          <Grid item xs={6}>
+        <Grid container>
+          <Grid item xs={12}>
             <Typography
               variant="h5"
               component="h1"
-              className={classes.sign}
-              container
+              className={classes.signInLogo}
             >
               Sign In
             </Typography>
-            <form noValidate autoComplete="off">
-              <TextField
-                id="email"
-                variant="outlined"
-                placeholder="Enter your email"
-                size="small"
-                className={classes.email}
-                fullWidth
-              />
-              <TextField
-                id="password"
-                variant="outlined"
-                placeholder="Enter your password"
-                size="small"
-                className={classes.password}
-                fullWidth
-              />
-            </form>
-            <FormControlLabel
-              control={<Checkbox name="checkedA" color="primary" />}
-              label={<Typography variant="body2">Keep me signed in</Typography>}
-            />
-            <Button
-              variant="contained"
-              className={classes.signIn}
-              onClick={createNewWindow}
-            >
-              Sign in
-            </Button>
-            <Grid item xs style={{ marginLeft: '-140px' }}>
-              <Button component={Link} to="/" className={classes.back}>
-                &lt; Back
-              </Button>
+          </Grid>
+          <Grid item xs={6} className={classes.grid}>
+            <Grid container direction="column">
+              <Grid item xs>
+                <TextField
+                  id="outlined-size-small"
+                  placeholder="Enter your email"
+                  variant="outlined"
+                  size="small"
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs>
+                <TextField
+                  id="outlined-size-small"
+                  placeholder="Enter your password"
+                  variant="outlined"
+                  size="small"
+                  fullWidth
+                  className={classes.password}
+                />
+              </Grid>
             </Grid>
-            <Grid item xs style={{ marginLeft: '300px' }}>
-              <Button
-                component={Link}
-                color="primary"
-                to="/signup"
-                className={classes.back}
-              >
-                Sign up free
-              </Button>
+          </Grid>
+          <Grid item xs={2}>
+            <Divider orientation="vertical" flexItem />
+          </Grid>
+          <Grid item xs={4} className={classes.grid}>
+            <Grid container direction="column">
+              <Typography>Hi</Typography>
             </Grid>
           </Grid>
         </Grid>
