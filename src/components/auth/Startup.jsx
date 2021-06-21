@@ -59,6 +59,7 @@ export default function Startup() {
           </Typography>
           <Grid item xs align="center">
             <Button
+              onClick={createNewWindow}
               variant="contained"
               size="small"
               fullWidth

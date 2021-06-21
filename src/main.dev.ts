@@ -75,6 +75,7 @@ const createWindow = async () => {
     webPreferences: {
       nodeIntegration: true,
       zoomFactor: 1,
+      enableRemoteModule: true,
     },
     resizable: false,
     autoHideMenuBar: true,

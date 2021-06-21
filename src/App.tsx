@@ -8,6 +8,7 @@ import store from './store';
 import Startup from './components/auth/Startup';
 import Login from './components/auth/Login';
 import Signup from './components/auth/Signup';
+import JoinMeeting from './components/meeting/JoinMeeting';
 
 export default function App() {
   return (
@@ -17,6 +18,7 @@ export default function App() {
           <Route exact path="/" component={Startup} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/signup" component={Signup} />
+          <Route exact path="/joinmeeting" component={JoinMeeting} />
         </Switch>
       </Router>
     </Provider>
