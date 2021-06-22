@@ -39,7 +39,7 @@ const useStyles = makeStyles(() =>
       marginTop: '1em',
     },
     signInButton: {
-      marginLeft: '.74em',
+      marginLeft: '7em',
     },
     bottomRow: {
       position: 'absolute',
@@ -60,8 +60,8 @@ export default function Login() {
   return (
     <>
       <div style={{ padding: 20 }}>
-        <Grid container>
-          <Grid item xs={12}>
+        <Grid container direction="column">
+          <Grid item xs={12} align="center">
             <Typography
               variant="h5"
               component="h1"
@@ -70,48 +70,41 @@ export default function Login() {
               Sign In
             </Typography>
           </Grid>
-          <Grid item xs={6} className={classes.grid}>
-            <Grid container direction="column">
-              <Grid item xs>
-                <TextField
-                  id="outlined-size-small"
-                  placeholder="Enter your email"
-                  variant="outlined"
-                  size="small"
-                  onChange={(text) => setValidEmail(text.target.value)}
-                  fullWidth
-                />
-              </Grid>
-              <Grid item xs>
-                <TextField
-                  id="outlined-size-small"
-                  placeholder="Enter your password"
-                  variant="outlined"
-                  size="small"
-                  onChange={(text) => setValidPassword(text.target.value)}
-                  fullWidth
-                  className={classes.password}
-                />
-              </Grid>
-              <Grid item xs className={classes.signInRow}>
-                <FormControlLabel
-                  control={<Checkbox color="primary" />}
-                  label="Keep me signed in"
-                />
-                <Button
-                  variant="contained"
-                  disabled={!(validPassword && validEmail)}
-                  className={classes.signInButton}
-                  onClick={createNewWindow}
-                >
-                  Sign in
-                </Button>
-              </Grid>
-            </Grid>
+          <Grid item xs={12} align="center" className={classes.grid}>
+            <TextField
+              id="outlined-size-small"
+              placeholder="Enter your email"
+              variant="outlined"
+              size="small"
+              fullWidth
+              onChange={(text) => setValidEmail(text.target.value)}
+            />
           </Grid>
-        </Grid>
-        <Grid item xs={2}>
-          <Divider orientation="vertical" flexItem />
+          <Grid item xs align="center">
+            <TextField
+              id="outlined-size-small"
+              placeholder="Enter your password"
+              variant="outlined"
+              size="small"
+              onChange={(text) => setValidPassword(text.target.value)}
+              fullWidth
+              className={classes.password}
+            />
+          </Grid>
+          <Grid item xs className={classes.signInRow}>
+            <FormControlLabel
+              control={<Checkbox color="primary" />}
+              label="Keep me signed in"
+            />
+            <Button
+              variant="contained"
+              disabled={!(validPassword && validEmail)}
+              className={classes.signInButton}
+              onClick={createNewWindow}
+            >
+              Sign in
+            </Button>
+          </Grid>
         </Grid>
         <Grid item xs className={classes.bottomRow}>
           <Button component={Link} to="/">
