@@ -1,10 +1,14 @@
 import React, { Fragment, useState } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Button, Container, Typography } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import axios from 'axios';
+import ProfilePicture from './ProfilePicture';
+import { setAlert } from '../../actions/alert';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -13,16 +17,10 @@ const useStyles = makeStyles(() =>
       fontWeight: '750',
     },
     grid: {
-      marginTop: '2em',
+      marginTop: '.75em',
     },
-    password: {
+    text: {
       marginTop: '1em',
-    },
-    signInRow: {
-      marginTop: '1em',
-    },
-    signInButton: {
-      marginLeft: '.74em',
     },
     bottomRow: {
       position: 'absolute',
@@ -30,39 +28,48 @@ const useStyles = makeStyles(() =>
     },
     signUp: {
       textDecoration: 'none',
-      marginLeft: '24em',
+      marginTop: '1em',
     },
   })
 );
-
-export default function Signup() {
+const Signup = ({ setAlert }) => {
   const classes = useStyles();
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    avatar: '',
+  });
+
+  const { name, email, password, avatar } = formData;
+
+  const onChange = (e) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
+    setAlert('Hello', 'error');
 
-    const body = JSON.stringify({ name, email, password });
+    // const config = {
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    // };
 
-    axios
-      .post('http://localhost:5000/api/auth', body, config)
-      .then((res) => {
-        console.log(res.data);
-        return null; // placeholder
-      })
-      .catch((error) => {
-        const { errors } = error.response.data;
-        if (errors) {
-          errors.forEach((err) => console.log(err));
-        }
-      });
+    // const body = JSON.stringify({ name, email, password });
+
+    // axios
+    //   .post('http://localhost:5000/api/auth', body, config)
+    //   .then((res) => {
+    //     console.log(res.data);
+    //     return null; // placeholder
+    //   })
+    //   .catch((error) => {
+    //     const { errors } = error.response.data;
+    //     if (errors) {
+    //       errors.forEach((err) => console.log(err));
+    //     }
+    //   });
   };
 
   return (
@@ -78,47 +85,66 @@ export default function Signup() {
               Sign Up
             </Typography>
           </Grid>
-          <Grid item xs={4} className={classes.grid}>
-            hi
-          </Grid>
           <Grid item xs={6} className={classes.grid}>
             <form onSubmit={handleSubmit}>
               <Grid container direction="column">
                 <Grid item>
                   <TextField
+                    name="name"
                     placeholder="Enter your name"
                     variant="outlined"
                     size="small"
-                    onChange={(text) => setName(text.target.value)}
+                    label="Name"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    onChange={(e) => onChange(e)}
+                    value={name}
                     fullWidth
                   />
                 </Grid>
                 <Grid item>
                   <TextField
+                    name="email"
                     placeholder="Enter your email"
                     variant="outlined"
                     size="small"
-                    onChange={(text) => setEmail(text.target.value)}
+                    onChange={(e) => onChange(e)}
                     fullWidth
-                    className={classes.password}
+                    label="Email"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    value={email}
+                    className={classes.text}
                   />
                 </Grid>
                 <Grid item>
                   <TextField
+                    name="password"
                     placeholder="Enter your password"
                     variant="outlined"
+                    type="password"
                     size="small"
-                    onChange={(text) => setPassword(text.target.value)}
+                    onChange={(e) => onChange(e)}
+                    value={password}
+                    label="Password"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
                     fullWidth
-                    className={classes.password}
+                    className={classes.text}
                   />
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item>
                   <Button
                     variant="outlined"
                     color="secondary"
                     label="Submit"
                     type="submit"
+                    fullWidth
+                    disabled={!(name && email && password)}
+                    className={classes.signUp}
                   >
                     Register
                   </Button>
@@ -126,8 +152,27 @@ export default function Signup() {
               </Grid>
             </form>
           </Grid>
+          <Grid
+            item
+            xs={5}
+            style={{ marginLeft: '20px' }}
+            className={classes.grid}
+          >
+            <ProfilePicture />
+          </Grid>
+          <Grid item xs className={classes.bottomRow}>
+            <Button component={Link} to="/login">
+              &lt; Back
+            </Button>
+          </Grid>
         </Grid>
       </div>
     </>
   );
-}
+};
+
+Signup.propTypes = {
+  setAlert?: PropTypes.func.isRequired,
+};
+
+export default connect(null, { setAlert })(Signup);

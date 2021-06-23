@@ -9,6 +9,7 @@ import Startup from './components/auth/Startup';
 import Login from './components/auth/Login';
 import Signup from './components/auth/Signup';
 import JoinMeeting from './components/meeting/JoinMeeting';
+import TopAlert from './components/layout/Alert';
 
 export default function App() {
   return (
@@ -16,8 +17,14 @@ export default function App() {
       <Router>
         <Switch>
           <Route exact path="/" component={Startup} />
-          <Route exact path="/login" component={Login} />
-          <Route exact path="/signup" component={Signup} />
+          <Route exact path="/login">
+            <TopAlert />
+            <Login />
+          </Route>
+          <Route exact path="/signup">
+            <TopAlert />
+            <Signup />
+          </Route>
           <Route exact path="/joinmeeting" component={JoinMeeting} />
         </Switch>
       </Router>

@@ -12,6 +12,7 @@ const createNewWindow = () => {
     height: 368,
     webPreferences: {
       nodeIntegration: true,
+      enableRemoteModule: true,
     },
     resizable: false,
     autoHideMenuBar: true,
@@ -53,44 +54,46 @@ export default function Startup() {
   return (
     <>
       <Grid container direction="column" justify="center" alignItems="center">
-        <Grid item xs align="center">
-          <Typography variant="h4" component="h1" className={classes.logo}>
-            zoom
-          </Typography>
+        <form>
           <Grid item xs align="center">
-            <Button
-              onClick={createNewWindow}
-              variant="contained"
-              size="small"
-              fullWidth
-              disableElevation
-              className={classes.joinButton}
-            >
-              Join a meeting
-            </Button>
-          </Grid>
-          <Grid item xs align="center">
-            <Button
-              size="small"
-              component={Link}
-              to="/login"
-              disableElevation
-              fullWidth
-              className={classes.signIn}
-            >
-              Sign in
-            </Button>
-          </Grid>
-          <Grid item xs align="center">
-            <Typography
-              variant="caption"
-              component="h2"
-              className={classes.version}
-            >
-              Version 1.0.0
+            <Typography variant="h4" component="h1" className={classes.logo}>
+              zoom
             </Typography>
+            <Grid item xs align="center">
+              <Button
+                onClick={createNewWindow}
+                variant="contained"
+                size="small"
+                fullWidth
+                disableElevation
+                className={classes.joinButton}
+              >
+                Join a meeting
+              </Button>
+            </Grid>
+            <Grid item xs align="center">
+              <Button
+                size="small"
+                component={Link}
+                to="/login"
+                disableElevation
+                fullWidth
+                className={classes.signIn}
+              >
+                Sign in
+              </Button>
+            </Grid>
+            <Grid item xs align="center">
+              <Typography
+                variant="caption"
+                component="h2"
+                className={classes.version}
+              >
+                Version 1.0.0
+              </Typography>
+            </Grid>
           </Grid>
-        </Grid>
+        </form>
       </Grid>
     </>
   );
