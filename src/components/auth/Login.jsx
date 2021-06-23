@@ -134,7 +134,7 @@ function Login({ setAlert }) {
 }
 
 Login.propTypes = {
-  setAlert?: PropTypes.func.isRequired,
-}
+  setAlert: PropTypes.func.isRequired,
+};
 
 export default connect(null, { setAlert })(Login);

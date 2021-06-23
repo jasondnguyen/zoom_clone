@@ -172,7 +172,7 @@ const Signup = ({ setAlert }) => {
 };
 
 Signup.propTypes = {
-  setAlert?: PropTypes.func.isRequired,
+  setAlert: PropTypes.func.isRequired,
 };
 
 export default connect(null, { setAlert })(Signup);
