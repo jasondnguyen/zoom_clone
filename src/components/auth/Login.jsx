@@ -1,14 +1,14 @@
 import React, { Fragment, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { Button, Container, Typography } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox';
-import { setAlert } from '../../actions/alert';
+import { login } from '../../actions/auth';
 
 const createNewWindow = () => {
   const electron = window.require('electron');
@@ -57,22 +57,34 @@ const useStyles = makeStyles(() =>
   })
 );
 
-function Login({ setAlert }) {
+function Login({ login, isAuthenticated }) {
   const classes = useStyles();
-  const [validEmail, setValidEmail] = useState(false);
-  const [validPassword, setValidPassword] = useState(false);
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  });
+
+  const { email, password } = formData;
+
+  const onChange = (e) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setAlert('Hello', 'error');
+    login(email, password);
   };
+
+  // Redirect if logged in
+  if (isAuthenticated) {
+    return <Redirect to="/dashboard" />;
+  }
 
   return (
     <>
       <div style={{ padding: 20 }}>
         <Grid container direction="column" alignItems="center" justify="center">
           <Grid item xs>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={(e) => handleSubmit(e)}>
               <Grid item xs={12} align="center">
                 <Typography
                   variant="h5"
@@ -84,21 +96,24 @@ function Login({ setAlert }) {
               </Grid>
               <Grid item xs="auto" className={classes.email}>
                 <TextField
+                  name="email"
                   id="outlined-size-small"
                   placeholder="Enter your email"
                   variant="outlined"
                   size="small"
                   fullWidth
-                  onChange={(text) => setValidEmail(text.target.value)}
+                  onChange={(e) => onChange(e)}
                 />
               </Grid>
               <Grid item xs="auto">
                 <TextField
+                  name="password"
                   id="outlined-size-small"
                   placeholder="Enter your password"
                   variant="outlined"
+                  type="password"
                   size="small"
-                  onChange={(text) => setValidPassword(text.target.value)}
+                  onChange={(e) => onChange(e)}
                   fullWidth
                   className={classes.password}
                 />
@@ -110,7 +125,7 @@ function Login({ setAlert }) {
                 />
                 <Button
                   variant="contained"
-                  disabled={!(validPassword && validEmail)}
+                  disabled={!(email && password)}
                   className={classes.signInButton}
                   type="submit"
                 >
@@ -134,7 +149,12 @@ function Login({ setAlert }) {
 }
 
 Login.propTypes = {
-  setAlert: PropTypes.func.isRequired,
+  login: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool,
 };
 
-export default connect(null, { setAlert })(Login);
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated,
+});
+
+export default connect(mapStateToProps, { login })(Login);

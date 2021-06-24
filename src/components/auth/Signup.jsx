@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { Button, Container, Typography } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
@@ -9,6 +9,7 @@ import TextField from '@material-ui/core/TextField';
 import axios from 'axios';
 import ProfilePicture from './ProfilePicture';
 import { setAlert } from '../../actions/alert';
+import { register } from '../../actions/auth';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -32,7 +33,7 @@ const useStyles = makeStyles(() =>
     },
   })
 );
-const Signup = ({ setAlert }) => {
+const Signup = ({ setAlert, register, isAuthenticated }) => {
   const classes = useStyles();
   const [formData, setFormData] = useState({
     name: '',
@@ -48,29 +49,12 @@ const Signup = ({ setAlert }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setAlert('Hello', 'error');
-
-    // const config = {
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    // };
-
-    // const body = JSON.stringify({ name, email, password });
-
-    // axios
-    //   .post('http://localhost:5000/api/auth', body, config)
-    //   .then((res) => {
-    //     console.log(res.data);
-    //     return null; // placeholder
-    //   })
-    //   .catch((error) => {
-    //     const { errors } = error.response.data;
-    //     if (errors) {
-    //       errors.forEach((err) => console.log(err));
-    //     }
-    //   });
+    register(name, email, password);
   };
+
+  if (isAuthenticated) {
+    return <Redirect to="/dashboard" />;
+  }
 
   return (
     <>
@@ -86,7 +70,7 @@ const Signup = ({ setAlert }) => {
             </Typography>
           </Grid>
           <Grid item xs={6} className={classes.grid}>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={(e) => handleSubmit(e)}>
               <Grid container direction="column">
                 <Grid item>
                   <TextField
@@ -173,6 +157,12 @@ const Signup = ({ setAlert }) => {
 
 Signup.propTypes = {
   setAlert: PropTypes.func.isRequired,
+  register: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool,
 };
 
-export default connect(null, { setAlert })(Signup);
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated,
+});
+
+export default connect(mapStateToProps, { setAlert, register })(Signup);
