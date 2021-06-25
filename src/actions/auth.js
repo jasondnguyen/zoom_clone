@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import axios from 'axios';
 import { setAlert } from './alert';
 import {
@@ -33,14 +34,21 @@ export const loadUser = () => async (dispatch) => {
 
 // Register user
 
-export const register = (name, email, password) => async (dispatch) => {
+export const register = ({ name, email, password, avatar }) => async (
+  dispatch
+) => {
   const config = {
     headers: {
       'Content-Type': 'application/json',
     },
   };
 
-  const body = JSON.stringify({ name, email, password });
+  const body = JSON.stringify({
+    name,
+    email,
+    password,
+    avatar,
+  });
 
   try {
     const res = await axios.post(
@@ -54,6 +62,8 @@ export const register = (name, email, password) => async (dispatch) => {
       payload: res.data,
     });
 
+    setAlert('Successfully created account', 'success');
+
     dispatch(loadUser());
   } catch (err) {
     const errors = err.response.data.errors;
@@ -63,7 +73,7 @@ export const register = (name, email, password) => async (dispatch) => {
     }
 
     dispatch({
-      type: LOGIN_FAIL,
+      type: REGISTER_FAIL,
     });
   }
 };
@@ -100,7 +110,7 @@ export const login = (email, password) => async (dispatch) => {
     }
 
     dispatch({
-      type: REGISTER_FAIL,
+      type: LOGIN_FAIL,
     });
   }
 };

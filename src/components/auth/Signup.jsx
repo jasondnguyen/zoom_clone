@@ -11,6 +11,24 @@ import ProfilePicture from './ProfilePicture';
 import { setAlert } from '../../actions/alert';
 import { register } from '../../actions/auth';
 
+const remote = require('electron').remote;
+
+const createNewWindow = () => {
+  const electron = window.require('electron');
+  const { BrowserWindow } = electron.remote;
+  const win = new BrowserWindow({
+    width: 1120,
+    height: 720,
+    webPreferences: {
+      nodeIntegration: true,
+      enableRemoteModule: true,
+    },
+    resizable: true,
+  });
+  win.loadURL(`file://${__dirname}/index.html#/home`);
+  win.setMenuBarVisibility(false);
+};
+
 const useStyles = makeStyles(() =>
   createStyles({
     signUpLogo: {
@@ -35,30 +53,45 @@ const useStyles = makeStyles(() =>
 );
 const Signup = ({ setAlert, register, isAuthenticated }) => {
   const classes = useStyles();
+  const [newWindow, setNewWindow] = useState('true');
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
+    password2: '',
     avatar: '',
+    defaultAvatar: true,
   });
 
-  const { name, email, password, avatar } = formData;
+  const { name, email, password, password2, avatar } = formData;
 
-  const onChange = (e) =>
+  const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    register(name, email, password);
+
+    if (password !== password2) {
+      setAlert(
+        'Passwords do not match. Please re-enter your password.',
+        'error'
+      );
+    } else {
+      register({ name, email, password, avatar });
+    }
   };
 
-  if (isAuthenticated) {
-    return <Redirect to="/dashboard" />;
-  }
+  // if (isAuthenticated && newWindow) {
+  //   setNewWindow(false);
+  //   var window = remote.getCurrentWindow();
+  //   window.close();
+  //   createNewWindow();
+  // }
 
   return (
     <>
-      <div style={{ padding: 20 }}>
+      <div style={{ padding: 5 }}>
         <Grid container>
           <Grid item xs={12}>
             <Typography
@@ -68,6 +101,14 @@ const Signup = ({ setAlert, register, isAuthenticated }) => {
             >
               Sign Up
             </Typography>
+          </Grid>
+          <Grid
+            item
+            xs={5}
+            style={{ marginRight: '30px' }}
+            className={classes.grid}
+          >
+            <ProfilePicture onChange={onChange} />
           </Grid>
           <Grid item xs={6} className={classes.grid}>
             <form onSubmit={(e) => handleSubmit(e)}>
@@ -121,6 +162,23 @@ const Signup = ({ setAlert, register, isAuthenticated }) => {
                   />
                 </Grid>
                 <Grid item>
+                  <TextField
+                    name="password2"
+                    placeholder="Confirm your password"
+                    variant="outlined"
+                    type="password"
+                    size="small"
+                    onChange={(e) => onChange(e)}
+                    value={password2}
+                    label="Confirm Password"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    fullWidth
+                    className={classes.text}
+                  />
+                </Grid>
+                <Grid item>
                   <Button
                     variant="outlined"
                     color="secondary"
@@ -135,14 +193,6 @@ const Signup = ({ setAlert, register, isAuthenticated }) => {
                 </Grid>
               </Grid>
             </form>
-          </Grid>
-          <Grid
-            item
-            xs={5}
-            style={{ marginLeft: '20px' }}
-            className={classes.grid}
-          >
-            <ProfilePicture />
           </Grid>
           <Grid item xs className={classes.bottomRow}>
             <Button component={Link} to="/login">

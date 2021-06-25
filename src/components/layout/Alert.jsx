@@ -7,7 +7,7 @@ const TopAlert = ({ alerts }) =>
   alerts.length > 0 &&
   alerts.map((alert) => (
     <div key={alert.id}>
-      <Alert severity={alert.alertType} style={{ maxHeight: '50px' }}>
+      <Alert severity={alert.alertType} style={{ maxHeight: '30px' }}>
         {alert.msg}
       </Alert>
     </div>

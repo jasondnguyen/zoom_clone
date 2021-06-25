@@ -10,6 +10,8 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox';
 import { login } from '../../actions/auth';
 
+const remote = require('electron').remote;
+
 const createNewWindow = () => {
   const electron = window.require('electron');
   const { BrowserWindow } = electron.remote;
@@ -59,6 +61,7 @@ const useStyles = makeStyles(() =>
 
 function Login({ login, isAuthenticated }) {
   const classes = useStyles();
+  const [newWindow, setNewWindow] = useState('true');
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -75,9 +78,12 @@ function Login({ login, isAuthenticated }) {
   };
 
   // Redirect if logged in
-  if (isAuthenticated) {
-    return <Redirect to="/dashboard" />;
-  }
+  // if (isAuthenticated && newWindow) {
+  //   setNewWindow(false);
+  //   var window = remote.getCurrentWindow();
+  //   window.close();
+  //   createNewWindow();
+  // }
 
   return (
     <>
