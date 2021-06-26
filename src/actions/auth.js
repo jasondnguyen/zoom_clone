@@ -62,7 +62,7 @@ export const register = ({ name, email, password, avatar }) => async (
       payload: res.data,
     });
 
-    setAlert('Successfully created account', 'success');
+    dispatch(setAlert('Successfully created account', 'success'));
 
     dispatch(loadUser());
   } catch (err) {
