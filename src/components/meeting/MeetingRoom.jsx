@@ -1,16 +1,24 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import io from 'socket.io-client';
+import Webcam from 'react-webcam';
+import { ReactMic } from 'react-mic';
 
 const MeetingRoom = () => {
-  const socket = io('http://localhost:5000/');
+  const WebcamComponent = () => <Webcam />;
 
-  useEffect(() => {
-    socket.on('connection', () => {
-      console.log('connected');
-    });
-  }, []);
-
-  return <div>hi</div>;
+  return (
+    <div>
+      <Webcam />
+      <ReactMic record={true} />
+    </div>
+  );
 };
 
 export default MeetingRoom;
+
+// const socket = io('http://localhost:5000/');
+// useEffect(() => {
+//     socket.on('connection', () => {
+//       console.log('connected');
+//     });
+//   }, []);
