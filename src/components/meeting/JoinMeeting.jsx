@@ -1,4 +1,5 @@
 import React, { Fragment, useState } from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Button, Container, Typography } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
@@ -6,14 +7,8 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox';
-
-const electron = require('electron');
-
-const handleCancel = () => {
-  const { remote } = electron.remote;
-  const window = remote.getCurrentWindow();
-  window.close();
-};
+import { setAlert } from '../../actions/alert';
+import { joinRoom } from '../../actions/meeting';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -39,10 +34,20 @@ const useStyles = makeStyles(() =>
   })
 );
 
-const JoinMeeting = () => {
+const JoinMeeting = ({ joinRoom, setAlert }) => {
   const classes = useStyles();
-  const [meetingID, setMeetingID] = useState('');
-  const [name, setName] = useState('');
+
+  const [formData, setFormData] = useState({ identity: '', room: null });
+
+  const { identity, room } = formData;
+
+  const onChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (identity, room) => {
+    joinRoom(identity, room);
+  };
 
   return (
     <>
@@ -54,27 +59,23 @@ const JoinMeeting = () => {
             </Typography>
           </Grid>
           <Grid item xs>
-            <form noValidate autoComplete="off">
+            <form handleSubmit={handleSubmit}>
               <TextField
-                id="meetingID"
+                name="room"
                 variant="outlined"
                 placeholder="Enter meeting ID"
                 size="small"
                 className={classes.id}
-                onChange={(e) => {
-                  setMeetingID(e.target.value);
-                }}
+                onChange={onChange}
                 fullWidth
               />
               <TextField
-                id="name"
+                name="identity"
                 variant="outlined"
                 placeholder="Enter your name"
                 size="small"
                 className={classes.name}
-                onChange={(e) => {
-                  setName(e.target.value);
-                }}
+                onChange={onChange}
                 fullWidth
               />
               <FormControlLabel
@@ -94,16 +95,13 @@ const JoinMeeting = () => {
               />
               <Button
                 variant="contained"
-                disabled={!(meetingID && name)}
+                type="submit"
+                disabled={!(room && identity)}
                 className={classes.joinButton}
               >
                 Join
               </Button>
-              <Button
-                variant="contained"
-                onClick={handleCancel}
-                className={classes.cancelButton}
-              >
+              <Button variant="contained" className={classes.cancelButton}>
                 Cancel
               </Button>
             </form>
@@ -114,4 +112,4 @@ const JoinMeeting = () => {
   );
 };
 
-export default JoinMeeting;
+export default connect(null, { joinRoom })(JoinMeeting);
