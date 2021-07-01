@@ -52,50 +52,53 @@ const JoinMeeting = ({ joinRoom, setAlert }) => {
 
   return (
     <>
-      <div style={{ padding: 20 }}>
-        <Grid container direction="column" justify="center" alignItems="left">
-          <Grid item xs>
-            <Typography variant="h5" component="h1" className={classes.join}>
-              Join Meeting
-            </Typography>
-          </Grid>
-          <Grid item xs>
-            <form onSubmit={(e) => handleSubmit(e)}>
-              <TextField
-                name="room"
-                variant="outlined"
-                placeholder="Enter meeting ID"
-                size="small"
-                value={room}
-                className={classes.id}
-                onChange={(e) => onChange(e)}
-                fullWidth
-              />
-              <TextField
-                name="identity"
-                value={identity}
-                variant="outlined"
-                placeholder="Enter your name"
-                size="small"
-                className={classes.name}
-                onChange={(e) => onChange(e)}
-                fullWidth
-              />
-              <Button
-                variant="contained"
-                type="submit"
-                disabled={!(room && identity)}
-                className={classes.joinButton}
-              >
-                Join
-              </Button>
-              <Button variant="contained" className={classes.cancelButton}>
-                Cancel
-              </Button>
-            </form>
-          </Grid>
+      <Grid container direction="column" justify="center" alignItems="left">
+        <Grid item xs>
+          <Typography variant="h5" component="h1" className={classes.join}>
+            Join Meeting
+          </Typography>
         </Grid>
-      </div>
+        <Grid item xs>
+          <form onSubmit={(e) => handleSubmit(e)}>
+            <TextField
+              name="room"
+              variant="outlined"
+              placeholder="Enter meeting ID"
+              size="small"
+              value={room}
+              className={classes.id}
+              onChange={(e) => onChange(e)}
+              fullWidth
+            />
+            <TextField
+              name="identity"
+              value={identity}
+              variant="outlined"
+              placeholder="Enter your name"
+              size="small"
+              className={classes.name}
+              onChange={(e) => onChange(e)}
+              fullWidth
+            />
+            <Button
+              variant="contained"
+              type="submit"
+              disabled={!(room && identity)}
+              className={classes.joinButton}
+            >
+              Join
+            </Button>
+            <Button
+              component={Link}
+              to="/"
+              variant="contained"
+              className={classes.cancelButton}
+            >
+              Cancel
+            </Button>
+          </form>
+        </Grid>
+      </Grid>
     </>
   );
 };

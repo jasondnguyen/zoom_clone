@@ -6,32 +6,13 @@ import { Button, Container, Typography } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox';
 import { login } from '../../actions/auth';
-
-const remote = require('electron').remote;
-
-const createNewWindow = () => {
-  const electron = window.require('electron');
-  const { BrowserWindow } = electron.remote;
-  const win = new BrowserWindow({
-    width: 1120,
-    height: 720,
-    webPreferences: {
-      nodeIntegration: true,
-      enableRemoteModule: true,
-    },
-    resizable: true,
-  });
-  win.loadURL(`file://${__dirname}/index.html#/home`);
-  win.setMenuBarVisibility(false);
-};
+import DividerWithText from '../layout/DividerWithText';
 
 const useStyles = makeStyles(() =>
   createStyles({
     signInLogo: {
-      fontSize: '1.75em',
+      fontSize: '2em',
       fontWeight: '750',
     },
     email: {
@@ -42,26 +23,32 @@ const useStyles = makeStyles(() =>
       marginTop: '1em',
       width: '350px',
     },
-    signInRow: {
+    signIn: {
+      borderRadius: '8px',
       marginTop: '1em',
-    },
-    signInButton: {
-      marginLeft: '6em',
-    },
-    bottomRow: {
-      position: 'absolute',
-      bottom: '15px',
+      backgroundColor: '#0E71EB',
+      color: 'white',
     },
     signUp: {
-      textDecoration: 'none',
-      marginLeft: '24em',
+      borderRadius: '8px',
+      marginTop: '1em',
+      backgroundColor: '#F26D21',
+      color: 'white',
+    },
+    back: {
+      borderRadius: '8px',
+      marginTop: '1em',
+      border: '2px solid #EDEDF4',
+    },
+    divider: {
+      width: '100%',
+      marginTop: '1em',
     },
   })
 );
 
 function Login({ login, isAuthenticated }) {
   const classes = useStyles();
-  const [newWindow, setNewWindow] = useState('true');
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -77,79 +64,84 @@ function Login({ login, isAuthenticated }) {
     login(email, password);
   };
 
-  // Redirect if logged in
-  // if (isAuthenticated && newWindow) {
-  //   setNewWindow(false);
-  //   var window = remote.getCurrentWindow();
-  //   window.close();
-  //   createNewWindow();
-  // }
-
   return (
     <>
-      <div style={{ padding: 20 }}>
-        <Grid container direction="column" alignItems="center" justify="center">
-          <Grid item xs>
-            <form onSubmit={(e) => handleSubmit(e)}>
-              <Grid item xs={12} align="center">
-                <Typography
-                  variant="h5"
-                  component="h1"
-                  className={classes.signInLogo}
-                >
-                  Sign In
-                </Typography>
-              </Grid>
-              <Grid item xs="auto" className={classes.email}>
-                <TextField
-                  name="email"
-                  id="outlined-size-small"
-                  placeholder="Enter your email"
-                  variant="outlined"
-                  size="small"
-                  fullWidth
-                  onChange={(e) => onChange(e)}
-                />
-              </Grid>
-              <Grid item xs="auto">
-                <TextField
-                  name="password"
-                  id="outlined-size-small"
-                  placeholder="Enter your password"
-                  variant="outlined"
-                  type="password"
-                  size="small"
-                  onChange={(e) => onChange(e)}
-                  fullWidth
-                  className={classes.password}
-                />
-              </Grid>
-              <Grid item xs="auto" className={classes.signInRow}>
-                <FormControlLabel
-                  control={<Checkbox color="primary" />}
-                  label="Keep me signed in"
-                />
-                <Button
-                  variant="contained"
-                  disabled={!(email && password)}
-                  className={classes.signInButton}
-                  type="submit"
-                >
-                  Sign in
-                </Button>
-              </Grid>
-            </form>
+      <Grid
+        container
+        spacing={0}
+        direction="column"
+        alignItems="center"
+        justify="center"
+        style={{ minHeight: '100vh' }}
+      >
+        <Grid item xs="auto" align="center">
+          <Typography
+            variant="h5"
+            component="h1"
+            className={classes.signInLogo}
+          >
+            Sign In
+          </Typography>
+        </Grid>
+        <form onSubmit={(e) => handleSubmit(e)}>
+          <Grid item xs="auto">
+            <TextField
+              name="email"
+              placeholder="Enter your email"
+              variant="outlined"
+              size="small"
+              disableElevation
+              fullWidth
+              onChange={(e) => onChange(e)}
+              className={classes.email}
+            />
           </Grid>
-        </Grid>
-        <Grid item xs className={classes.bottomRow}>
-          <Button component={Link} to="/">
-            &lt; Back
-          </Button>
-          <Link to="/signup" className={classes.signUp}>
-            Sign Up Free
-          </Link>
-        </Grid>
-      </div>
+          <Grid item xs="auto">
+            <TextField
+              name="password"
+              placeholder="Enter your password"
+              variant="outlined"
+              type="password"
+              size="small"
+              fullWidth
+              onChange={(e) => onChange(e)}
+              className={classes.password}
+            />
+          </Grid>
+          <Grid item xs="auto">
+            <Button
+              variant="contained"
+              disabled={!(email && password)}
+              type="submit"
+              className={classes.signIn}
+              fullWidth
+              disableElevation
+            >
+              Sign in
+            </Button>
+          </Grid>
+          <Grid item xs="auto" className={classes.divider}>
+            <DividerWithText children="or" />
+          </Grid>
+          <Grid item xs="auto">
+            <Button
+              component={Link}
+              to="/signup"
+              variant="contained"
+              className={classes.signUp}
+              fullWidth
+              disableElevation
+            >
+              Sign up for free
+            </Button>
+          </Grid>
+          <Grid item xs="auto">
+            <Button fullWidth component={Link} to="/" className={classes.back}>
+              Back
+            </Button>
+          </Grid>
+        </form>
+      </Grid>
     </>
   );
 }

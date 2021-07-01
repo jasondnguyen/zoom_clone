@@ -6,6 +6,7 @@ import Signup from '../auth/Signup';
 import JoinMeeting from '../meeting/JoinMeeting';
 import TopAlert from '../layout/Alert';
 import Dashboard from '../dashboard/Dashboard';
+import MeetingHome from '../meeting/MeetingHome';
 
 const Routes = (props) => {
   return (
@@ -14,7 +15,7 @@ const Routes = (props) => {
       <Switch>
         <Route exact path="/login" component={Login} />
         <Route exact path="/signup" component={Signup} />
-        <Route exact path="/joinmeeting" component={JoinMeeting} />
+        <Route exact path="/joinmeeting" component={MeetingHome} />
         <Route exact path="/dashboard" component={Dashboard} />
       </Switch>
     </Container>

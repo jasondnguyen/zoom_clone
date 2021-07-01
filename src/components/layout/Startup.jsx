@@ -8,7 +8,6 @@ const useStyles = makeStyles(() =>
   createStyles({
     logo: {
       color: '#2D8CFF',
-      marginTop: '30vh',
       fontSize: '3.5em',
       fontWeight: '1000',
     },
@@ -37,13 +36,19 @@ export default function Startup() {
   const classes = useStyles();
   return (
     <>
-      <Grid container direction="column" justify="center" alignItems="center">
+      <Grid
+        container
+        direction="column"
+        alignItems="center"
+        justify="center"
+        style={{ minHeight: '100vh' }}
+      >
         <form>
-          <Grid item xs align="center">
+          <Grid item xs="auto" align="center">
             <Typography variant="h4" component="h1" className={classes.logo}>
               zoom
             </Typography>
-            <Grid item xs align="center">
+            <Grid item xs="auto">
               <Button
                 component={Link}
                 to="/joinmeeting"
@@ -56,7 +61,7 @@ export default function Startup() {
                 Join a meeting
               </Button>
             </Grid>
-            <Grid item xs align="center">
+            <Grid item xs="auto">
               <Button
                 size="small"
                 component={Link}
@@ -68,7 +73,7 @@ export default function Startup() {
                 Sign in
               </Button>
             </Grid>
-            <Grid item xs align="center">
+            <Grid item xs="auto" align="center">
               <Typography
                 variant="caption"
                 component="h2"
