@@ -37,7 +37,7 @@ const useStyles = makeStyles(() =>
 const JoinMeeting = ({ joinRoom, setAlert }) => {
   const classes = useStyles();
 
-  const [formData, setFormData] = useState({ identity: '', room: null });
+  const [formData, setFormData] = useState({ identity: '', room: '' });
 
   const { identity, room } = formData;
 
@@ -45,8 +45,9 @@ const JoinMeeting = ({ joinRoom, setAlert }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (identity, room) => {
-    joinRoom(identity, room);
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    joinRoom({ identity, room });
   };
 
   return (
@@ -59,39 +60,26 @@ const JoinMeeting = ({ joinRoom, setAlert }) => {
             </Typography>
           </Grid>
           <Grid item xs>
-            <form handleSubmit={handleSubmit}>
+            <form onSubmit={(e) => handleSubmit(e)}>
               <TextField
                 name="room"
                 variant="outlined"
                 placeholder="Enter meeting ID"
                 size="small"
+                value={room}
                 className={classes.id}
-                onChange={onChange}
+                onChange={(e) => onChange(e)}
                 fullWidth
               />
               <TextField
                 name="identity"
+                value={identity}
                 variant="outlined"
                 placeholder="Enter your name"
                 size="small"
                 className={classes.name}
-                onChange={onChange}
+                onChange={(e) => onChange(e)}
                 fullWidth
-              />
-              <FormControlLabel
-                className={classes.checkBoxes}
-                control={<Checkbox name="checkedA" color="primary" />}
-                label={
-                  <Typography variant="body2">
-                    Do not connect to audio
-                  </Typography>
-                }
-              />
-              <FormControlLabel
-                control={<Checkbox name="checkedA" color="primary" />}
-                label={
-                  <Typography variant="body2">Turn off my video</Typography>
-                }
               />
               <Button
                 variant="contained"
@@ -112,4 +100,4 @@ const JoinMeeting = ({ joinRoom, setAlert }) => {
   );
 };
 
-export default connect(null, { joinRoom })(JoinMeeting);
+export default connect(null, { joinRoom, setAlert })(JoinMeeting);

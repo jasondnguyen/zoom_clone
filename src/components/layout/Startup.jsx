@@ -4,27 +4,11 @@ import { Button, Typography } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 
-const createNewWindow = () => {
-  const electron = window.require('electron');
-  const { BrowserWindow } = electron.remote;
-  const win = new BrowserWindow({
-    width: 408,
-    height: 368,
-    webPreferences: {
-      nodeIntegration: true,
-      enableRemoteModule: true,
-    },
-    resizable: false,
-    autoHideMenuBar: true,
-  });
-  win.loadURL(`file://${__dirname}/index.html#/joinmeeting`);
-};
-
 const useStyles = makeStyles(() =>
   createStyles({
     logo: {
       color: '#2D8CFF',
-      marginTop: '15px',
+      marginTop: '30vh',
       fontSize: '3.5em',
       fontWeight: '1000',
     },
@@ -61,7 +45,8 @@ export default function Startup() {
             </Typography>
             <Grid item xs align="center">
               <Button
-                onClick={createNewWindow}
+                component={Link}
+                to="/joinmeeting"
                 variant="contained"
                 size="small"
                 fullWidth

@@ -8,7 +8,6 @@ import { loadUser } from './actions/auth';
 import setAuthToken from './utils/setAuthToken';
 import Startup from './components/layout/Startup';
 import Routes from './components/routing/Routes';
-import MeetingHome from './components/meeting/MeetingHome';
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);
@@ -23,7 +22,7 @@ export default function App() {
     <Provider store={store}>
       <Router>
         <Switch>
-          <Route exact path="/" component={MeetingHome} />
+          <Route exact path="/" component={Startup} />
           <Route component={Routes} />
         </Switch>
       </Router>

@@ -10,13 +10,15 @@ export const joinRoom = ({ identity, roomName }) => async (dispatch) => {
     },
   };
 
+  const body = JSON.stringify({ identity });
   try {
     const res = await axios.post(
-      'http://localhost:5000',
-      { identity: identity },
+      'http://localhost:5000/api/meeting',
+      body,
       config
     );
-    const room = await connect(res.data.accessToken, {
+
+    const room = await connect(res.data.token, {
       name: roomName,
       audio: true,
       video: true,
@@ -27,6 +29,7 @@ export const joinRoom = ({ identity, roomName }) => async (dispatch) => {
       payload: room,
     });
   } catch (err) {
+    console.log(err);
     const errors = err.response.data.errors;
 
     if (errors) {
@@ -38,7 +41,7 @@ export const joinRoom = ({ identity, roomName }) => async (dispatch) => {
   }
 };
 
-export const returnToLobby = () => {
+export const returnToLobby = () => (dispatch) => {
   dispatch({
     type: LEAVE_ROOM,
   });

@@ -69,15 +69,15 @@ const createWindow = async () => {
 
   mainWindow = new BrowserWindow({
     show: false,
-    width: 610,
-    height: 405,
+    width: 1024,
+    height: 728,
     icon: getAssetPath('icon.png'),
     webPreferences: {
       nodeIntegration: true,
       zoomFactor: 1,
       enableRemoteModule: true,
     },
-    resizable: false,
+    resizable: true,
     autoHideMenuBar: true,
   });
 
