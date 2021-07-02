@@ -8,6 +8,7 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import { login } from '../../actions/auth';
 import DividerWithText from '../layout/DividerWithText';
+import BackButton from '../layout/BackButton';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -35,11 +36,6 @@ const useStyles = makeStyles(() =>
       backgroundColor: '#F26D21',
       color: 'white',
     },
-    back: {
-      borderRadius: '8px',
-      marginTop: '1em',
-      border: '2px solid #EDEDF4',
-    },
     divider: {
       width: '100%',
       marginTop: '1em',
@@ -63,6 +59,10 @@ function Login({ login, isAuthenticated }) {
     e.preventDefault();
     login(email, password);
   };
+
+  if (isAuthenticated) {
+    return <Redirect to="/dashboard" />;
+  }
 
   return (
     <>
@@ -136,9 +136,7 @@ function Login({ login, isAuthenticated }) {
             </Button>
           </Grid>
           <Grid item xs="auto">
-            <Button fullWidth component={Link} to="/" className={classes.back}>
-              Back
-            </Button>
+            <BackButton link="/" />
           </Grid>
         </form>
       </Grid>

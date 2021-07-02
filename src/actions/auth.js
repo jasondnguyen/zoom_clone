@@ -8,8 +8,15 @@ import {
   AUTH_ERROR,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
+  SIGN_OUT,
 } from './types';
 import setAuthToken from '../utils/setAuthToken';
+
+export const signOut = () => async (dispatch) => {
+  dispatch({
+    type: SIGN_OUT,
+  });
+};
 
 // Load User
 
@@ -19,7 +26,7 @@ export const loadUser = () => async (dispatch) => {
   }
 
   try {
-    const res = await axios.get('/api/auth');
+    const res = await axios.get('http://localhost:5000/api/auth');
 
     dispatch({
       type: USER_LOADED,
@@ -43,14 +50,34 @@ export const register = ({ name, email, password, avatar }) => async (
     },
   };
 
-  const body = JSON.stringify({
-    name,
-    email,
-    password,
-    avatar,
-  });
+  const s3Config = {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  };
 
   try {
+    const s3Res = await axios.post(
+      'http://localhost:5000/api/users/s3url',
+      {},
+      config
+    );
+
+    const { url, id } = s3Res.data;
+
+    await axios.put(url, avatar, s3Config);
+
+    const picture = url.split('?')[0];
+
+    const body = JSON.stringify({
+      name,
+      email,
+      password,
+      avatar,
+      picture,
+      id,
+    });
+
     const res = await axios.post(
       'http://localhost:5000/api/users',
       body,

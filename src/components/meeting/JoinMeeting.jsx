@@ -5,10 +5,10 @@ import { Button, Container, Typography } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox';
 import { setAlert } from '../../actions/alert';
 import { joinRoom } from '../../actions/meeting';
+import BackButton from '../layout/BackButton';
+import DividerWithText from '../layout/DividerWithText';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -16,25 +16,16 @@ const useStyles = makeStyles(() =>
       fontSize: '24px',
       fontWeight: 'bold',
     },
-    id: {
-      marginTop: '1em',
-    },
-    name: {
-      marginTop: '1em',
-    },
-    checkBoxes: {
+    textFields: {
       marginTop: '1em',
     },
     joinButton: {
-      marginLeft: '12.5em',
-    },
-    cancelButton: {
-      marginLeft: '1em',
+      marginTop: '1em',
     },
   })
 );
 
-const JoinMeeting = ({ joinRoom, setAlert }) => {
+const JoinMeeting = ({ joinRoom, setAlert, isAuthenticated }) => {
   const classes = useStyles();
 
   const [formData, setFormData] = useState({ identity: '', room: '' });
@@ -51,56 +42,65 @@ const JoinMeeting = ({ joinRoom, setAlert }) => {
   };
 
   return (
-    <>
-      <Grid container direction="column" justify="center" alignItems="left">
-        <Grid item xs>
-          <Typography variant="h5" component="h1" className={classes.join}>
-            Join Meeting
-          </Typography>
-        </Grid>
-        <Grid item xs>
-          <form onSubmit={(e) => handleSubmit(e)}>
-            <TextField
-              name="room"
-              variant="outlined"
-              placeholder="Enter meeting ID"
-              size="small"
-              value={room}
-              className={classes.id}
-              onChange={(e) => onChange(e)}
-              fullWidth
-            />
-            <TextField
-              name="identity"
-              value={identity}
-              variant="outlined"
-              placeholder="Enter your name"
-              size="small"
-              className={classes.name}
-              onChange={(e) => onChange(e)}
-              fullWidth
-            />
-            <Button
-              variant="contained"
-              type="submit"
-              disabled={!(room && identity)}
-              className={classes.joinButton}
-            >
-              Join
-            </Button>
-            <Button
-              component={Link}
-              to="/"
-              variant="contained"
-              className={classes.cancelButton}
-            >
-              Cancel
-            </Button>
-          </form>
-        </Grid>
+    <Grid
+      container
+      spacing={0}
+      direction="column"
+      alignItems="center"
+      justify="center"
+      style={{ minHeight: '100vh' }}
+    >
+      <Grid item>
+        <Typography variant="h5" component="h1" className={classes.join}>
+          Join Meeting
+        </Typography>
       </Grid>
-    </>
+      <form onSubmit={(e) => handleSubmit(e)}>
+        <Grid item>
+          <TextField
+            name="room"
+            variant="outlined"
+            placeholder="Enter meeting ID"
+            size="small"
+            value={room}
+            className={classes.textFields}
+            onChange={(e) => onChange(e)}
+            fullWidth
+          />
+          <TextField
+            name="identity"
+            value={identity}
+            variant="outlined"
+            placeholder="Enter your name"
+            size="small"
+            className={classes.textFields}
+            onChange={(e) => onChange(e)}
+            fullWidth
+          />
+        </Grid>
+        <Grid item>
+          <Button
+            variant="contained"
+            color="primary"
+            type="submit"
+            fullWidth
+            disabled={!(room && identity)}
+            className={classes.joinButton}
+          >
+            Join
+          </Button>
+        </Grid>
+        <Grid item style={{ marginTop: '1em' }}>
+          <DividerWithText children="or" />
+          <BackButton link={isAuthenticated ? '/dashboard' : '/'} />
+        </Grid>
+      </form>
+    </Grid>
   );
 };
 
-export default connect(null, { joinRoom, setAlert })(JoinMeeting);
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated,
+});
+
+export default connect(mapStateToProps, { joinRoom, setAlert })(JoinMeeting);

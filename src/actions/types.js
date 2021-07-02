@@ -9,3 +9,4 @@ export const LOGIN_FAIL = 'LOGIN_FAIL';
 export const JOIN_SUCCESS = 'JOIN_SUCCESS';
 export const JOIN_FAIL = 'JOIN_FAIL';
 export const LEAVE_ROOM = 'LEAVE_ROOM';
+export const SIGN_OUT = 'SIGN_OUT';

@@ -1,6 +1,7 @@
 import React from 'react';
 import { HashRouter as Router, Switch, Route } from 'react-router-dom';
 import { Container } from '@material-ui/core';
+import PrivateRoute from './PrivateRoute';
 import Login from '../auth/Login';
 import Signup from '../auth/Signup';
 import JoinMeeting from '../meeting/JoinMeeting';
@@ -16,7 +17,7 @@ const Routes = (props) => {
         <Route exact path="/login" component={Login} />
         <Route exact path="/signup" component={Signup} />
         <Route exact path="/joinmeeting" component={MeetingHome} />
-        <Route exact path="/dashboard" component={Dashboard} />
+        <PrivateRoute exact path="/dashboard" component={Dashboard} />
       </Switch>
     </Container>
   );

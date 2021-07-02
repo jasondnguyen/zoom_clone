@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { Button } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import defaultPicture from '../../../assets/defaultpicture.png';
 import { setAlert } from '../../actions/alert';
 import { connect } from 'react-redux';
+import { Grid } from '@material-ui/core';
 
 const useStyles = makeStyles(() =>
   createStyles({
     picture: {
-      width: '250px',
-      height: '200px',
+      width: '400px',
+      height: '250px',
       border: '1px solid black',
     },
   })
@@ -26,7 +27,7 @@ const ProfilePicture = ({ setAlert, onChange }) => {
 
       let event = {
         target: {
-          value: newPic,
+          value: e.target.files[0],
           name: 'avatar',
         },
       };
@@ -38,24 +39,41 @@ const ProfilePicture = ({ setAlert, onChange }) => {
   };
 
   return (
-    <div>
-      <img src={displayedPicture} className={classes.picture} alt="profile" />
-      <input
-        id="img"
-        type="file"
-        accept="image/*"
-        style={{ display: 'none' }}
-        onChange={handleChange}
-      />
-      <Button
-        component="label"
-        for="img"
-        style={{ border: '1px solid black', width: '250px', height: '20px' }}
-        size="small"
+    <>
+      <Grid
+        container
+        spacing={0}
+        direction="column"
+        alignItems="center"
+        justify="center"
       >
-        Select file
-      </Button>
-    </div>
+        <Grid item xs="auto">
+          <img
+            src={displayedPicture}
+            className={classes.picture}
+            alt="profile"
+          />
+          <input
+            id="img"
+            type="file"
+            accept="image/*"
+            style={{ display: 'none' }}
+            onChange={handleChange}
+          />
+          <Button
+            component="label"
+            for="img"
+            style={{
+              border: '1px solid black',
+              width: '250px',
+            }}
+            size="small"
+          >
+            Select file
+          </Button>
+        </Grid>
+      </Grid>
+    </>
   );
 };
 
