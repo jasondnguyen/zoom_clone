@@ -2,7 +2,8 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Grid } from '@material-ui/core';
 import UserGreeting from './UserGreeting';
-import { Button, Link } from '@material-ui/core';
+import { Button } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 import { signOut } from '../../actions/auth';
 
 const Dashboard = ({ user, signOut }) => {

@@ -1,63 +1,51 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
+import ParticipantGrid from './ParticipantGrid';
+import Chatbox from './Chatbox';
+import RoomBottomBar from './RoomBottomBar';
 import { connect } from 'react-redux';
+import { createStyles, makeStyles, Grid } from '@material-ui/core';
 import { returnToLobby } from '../../actions/meeting';
-import Participant from './Participant';
 
-const Room = ({ returnToLobby, room }) => {
-  const [remoteParticipants, setRemoteParticipants] = useState(
-    Array.from(room.participants.values())
-  );
+const useStyles = makeStyles(() =>
+  createStyles({
+    room: {
+      backgroundColor: 'gray',
+    },
+  })
+);
 
-  const addParticiapnt = (participant) => {
-    setRemoteParticipants({ ...remoteParticipants, participant });
-  };
-
-  const removeParticipant = (participant) => {
-    const newList = remoteParticipants.filter(
-      (p) => p.identity != participant.identity
-    );
-    setRemoteParticipants(newList);
-  };
+const Room = ({ returnToLobby, room, meetingID }) => {
+  const classes = useStyles();
+  const [showChat, setShowChat] = useState(true);
 
   const leaveRoom = () => {
     room.disconnect();
     returnToLobby();
   };
 
-  useEffect(() => {
-    room.on('participantConnected', (participant) =>
-      addParticipant(participant)
-    );
-    room.on('participantDisconnected', (participant) =>
-      removeParticipant(participant)
-    );
-
-    return () => {
-      leaveRoom();
-    };
-  }, []);
+  const chatView = (e) => {
+    e.preventDefault();
+    setShowChat(!showChat);
+  };
 
   return (
-    <div className="room">
-      <div className="participants">
-        <Participant
-          key={room.localParticipant.identity}
-          localParticipant="true"
-          participant={room.localParticipant}
-        />
-        {remoteParticipants.map((participant) => (
-          <Participant key={participant.identity} participant={participant} />
-        ))}
-      </div>
-      <button id="leaveRoom" onClick={leaveRoom}>
-        Leave Room
-      </button>
-    </div>
+    <>
+      <Grid container>
+        <Grid item xs={9 ? showChat : 12}>
+          <ParticipantGrid room={room} />
+        </Grid>
+        <Grid item xs={3}>
+          {showChat && <Chatbox meetingId={meetingID} />}
+        </Grid>
+      </Grid>
+      <RoomBottomBar leaveRoom={leaveRoom} chatView={chatView} />
+    </>
   );
 };
 
 const mapStateToProps = (state) => ({
   room: state.meeting.room,
+  meetingID: state.meeting.meetingID,
 });
 
 export default connect(mapStateToProps, { returnToLobby })(Room);

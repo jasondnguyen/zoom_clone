@@ -1,15 +1,15 @@
 import React, { useEffect } from 'react';
 
-const Track = (props) => {
-  const ref = React.createRef();
+const Track = ({ track, tracks }) => {
+  let ref = React.createRef();
 
   useEffect(() => {
-    if (props.track != null) {
-      const child = props.track.attach();
-      ref.current.classList.add(props.track.kind);
+    if (track != null) {
+      const child = track.attach();
+      ref.current.classList.add(track.kind);
       ref.current.appendChild(child);
     }
-  });
+  }, [tracks]);
 
   return <div ref={ref}></div>;
 };

@@ -26,7 +26,7 @@ export const joinRoom = ({ identity, roomName }) => async (dispatch) => {
 
     dispatch({
       type: JOIN_SUCCESS,
-      payload: room,
+      payload: { room: room, name: identity, meetingID: roomName },
     });
   } catch (err) {
     console.log(err);

@@ -18,15 +18,14 @@ const Participant = ({ participant, localParticipant }) => {
     if (!localParticipant) {
       participant.on('trackSubscribed', (track) => addTrack(track));
     }
-  });
+  }, []);
 
   return (
     <div>
-      <div>
-        {tracks.map((track) => (
-          <Track key={track} track={track} />
-        ))}
-      </div>
+      {tracks.map((track) => (
+        <Track key={track} track={track} tracks={tracks} />
+      ))}
+      {participant.identity}
     </div>
   );
 };
