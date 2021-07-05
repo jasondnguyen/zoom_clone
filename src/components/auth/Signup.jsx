@@ -2,15 +2,21 @@ import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
-import { Button, Container, Typography } from '@material-ui/core';
-import Grid from '@material-ui/core/Grid';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
 import ProfilePicture from './ProfilePicture';
 import { setAlert } from '../../actions/alert';
 import { register } from '../../actions/auth';
-import { Divider } from '@material-ui/core';
 import BackButton from '../layout/BackButton';
+import SignupForm from './SignupForm';
+import {
+  Button,
+  Container,
+  Typography,
+  Grid,
+  createStyles,
+  makeStyles,
+  TextField,
+  Divider,
+} from '@material-ui/core';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -89,77 +95,11 @@ const Signup = ({ setAlert, register, isAuthenticated }) => {
         <Grid item className={classes.grid}>
           <form onSubmit={(e) => handleSubmit(e)}>
             <Grid container direction="row">
-              <Grid item xs={6}>
+              <Grid item xs={6} style={{ marginRight: '3em' }}>
                 <ProfilePicture onChange={onChange} />
               </Grid>
-              <Grid item xs={6}>
-                <Grid container direction="column">
-                  <Grid item>
-                    <TextField
-                      name="name"
-                      placeholder="Enter your name"
-                      variant="outlined"
-                      size="small"
-                      label="Name"
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      onChange={(e) => onChange(e)}
-                      value={name}
-                      fullWidth
-                    />
-                  </Grid>
-                  <Grid item>
-                    <TextField
-                      name="email"
-                      placeholder="Enter your email"
-                      variant="outlined"
-                      size="small"
-                      onChange={(e) => onChange(e)}
-                      fullWidth
-                      label="Email"
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      value={email}
-                      className={classes.text}
-                    />
-                  </Grid>
-                  <Grid item>
-                    <TextField
-                      name="password"
-                      placeholder="Enter your password"
-                      variant="outlined"
-                      type="password"
-                      size="small"
-                      onChange={(e) => onChange(e)}
-                      value={password}
-                      label="Password"
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      fullWidth
-                      className={classes.text}
-                    />
-                  </Grid>
-                  <Grid item>
-                    <TextField
-                      name="password2"
-                      placeholder="Confirm your password"
-                      variant="outlined"
-                      type="password"
-                      size="small"
-                      onChange={(e) => onChange(e)}
-                      value={password2}
-                      label="Confirm Password"
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      fullWidth
-                      className={classes.text}
-                    />
-                  </Grid>
-                </Grid>
+              <Grid item xs={4.5}>
+                <SignupForm onChange={onChange} />
               </Grid>
             </Grid>
             <Grid item>

@@ -30,8 +30,8 @@ const Room = ({ returnToLobby, room, meetingID }) => {
 
   return (
     <>
-      <Grid container>
-        <Grid item xs={9 ? showChat : 12}>
+      <Grid container spacing={0}>
+        <Grid item xs={9} className={classes.room}>
           <ParticipantGrid room={room} />
         </Grid>
         <Grid item xs={3}>

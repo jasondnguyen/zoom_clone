@@ -1,14 +1,19 @@
 import React, { Fragment, useState } from 'react';
+import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Link, Redirect } from 'react-router-dom';
-import { Button, Container, Typography } from '@material-ui/core';
-import Grid from '@material-ui/core/Grid';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
 import { login } from '../../actions/auth';
 import DividerWithText from '../layout/DividerWithText';
 import BackButton from '../layout/BackButton';
+import {
+  Button,
+  Container,
+  Typography,
+  Grid,
+  createStyles,
+  makeStyles,
+  TextField,
+} from '@material-ui/core';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -45,6 +50,7 @@ const useStyles = makeStyles(() =>
 
 function Login({ login, isAuthenticated }) {
   const classes = useStyles();
+
   const [formData, setFormData] = useState({
     email: '',
     password: '',

@@ -1,17 +1,21 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { Button } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { connect } from 'react-redux';
+import { Button, createStyles, makeStyles, Grid } from '@material-ui/core';
 import defaultPicture from '../../../assets/defaultpicture.png';
 import { setAlert } from '../../actions/alert';
-import { connect } from 'react-redux';
-import { Grid } from '@material-ui/core';
+import PropTypes from 'prop-types';
 
 const useStyles = makeStyles(() =>
   createStyles({
     picture: {
-      width: '400px',
+      width: '300px',
       height: '250px',
       border: '1px solid black',
+      objectFit: 'cover',
+    },
+    uploadButton: {
+      border: '1px solid black',
+      width: '305px',
     },
   })
 );
@@ -60,13 +64,12 @@ const ProfilePicture = ({ setAlert, onChange }) => {
             style={{ display: 'none' }}
             onChange={handleChange}
           />
+        </Grid>
+        <Grid item>
           <Button
             component="label"
             for="img"
-            style={{
-              border: '1px solid black',
-              width: '250px',
-            }}
+            className={classes.uploadButton}
             size="small"
           >
             Select file
@@ -75,6 +78,11 @@ const ProfilePicture = ({ setAlert, onChange }) => {
       </Grid>
     </>
   );
+};
+
+ProfilePicture.propTypes = {
+  onChange: PropTypes.func.isRequired,
+  setAlert: PropTypes.func.isRequired,
 };
 
 export default connect(null, { setAlert })(ProfilePicture);
