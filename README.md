@@ -2,23 +2,13 @@
 <br />
 <p align="center">
   <a href="https://github.com/github_username/repo_name">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="assets/logo.png" alt="Logo" width="80" height="80">
   </a>
 
-  <h3 align="center">project_title</h3>
+  <h3 align="center">Zoom Clone</h3>
 
   <p align="center">
-    project_description
-    <br />
-    <a href="https://github.com/github_username/repo_name"><strong>Explore the docs »</strong></a>
-    <br />
-    <br />
-    <a href="https://github.com/github_username/repo_name">View Demo</a>
-    ·
-    <a href="https://github.com/github_username/repo_name/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/github_username/repo_name/issues">Request Feature</a>
-  </p>
+    A clone of the popular video conference app Zoom!
 </p>
 
 
@@ -42,41 +32,36 @@
     </li>
     <li><a href="#usage">Usage</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgements">Acknowledgements</a></li>
   </ol>
 </details>
 
-
-
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+<img src = "assets/zoom_startup_screen.png" />
 
-Here's a blank template to get started:
-**To avoid retyping too much info. Do a search and replace with your text editor for the following:**
-`github_username`, `repo_name`, `twitter_handle`, `email`, `project_title`, `project_description`
+<p> After the start of quarantine and the prominence of remote learning began, I was amazed to see the rise of Zoom as the primary method of communciation between teacher and student. Prior to the start of Zoom's popularity, I took for granted the ability to have many particpants in a video conference that ran in an effieicent manner. </p>
 
+<p> Because of this, I was inspired to create a clone of zoom in order to better understand the underlying technologies behind the video conference application as well as to familiarize myself with fullstack web development. </p>
 
 ### Built With
 
-* []()
-* []()
-* []()
+* [Electron](https://www.electronjs.org/)
+* [React](https://reactjs.org/)
+* [DynamoDB](https://aws.amazon.com/)
+* [S3](https://aws.amazon.com/)
+* [Twilio Programmable Video API](https://www.twilio.com/docs/video)
+* [Socket.io](https://socket.io/)
+* [Express](https://expressjs.com/)
 
-
-
-<!-- GETTING STARTED -->
 ## Getting Started
 
 To get a local copy up and running follow these simple steps.
 
 ### Prerequisites
-
-This is an example of how to list things you need to use the software and how to install them.
 * npm
   ```sh
   npm install npm@latest -g
@@ -86,70 +71,96 @@ This is an example of how to list things you need to use the software and how to
 
 1. Clone the repo
    ```sh
-   git clone https://github.com/github_username/repo_name.git
+   git clone https://github.com/jasondnguyen/zoom_clone_electron.git
+   git clone https://github.com/jasondnguyen/zoom-clone-backend.git
    ```
 2. Install NPM packages
    ```sh
    npm install
-   ```
-
-
-
+   ```   
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+<img src = "assets/joinmeeting.png" />
+<p> Upon clicking the join meeting button, the user is presented the join meeting screen that prompts them to enter the room they want to join and their username. </p>
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+<img src = "assets/inputtingmeetingdetails.png" />
+<p> Once they have inputted these details, the user is then allowed to click the join room button, which sends this request the the backend express server. </p>
 
+```bash
+router.post('/', (req, res, next) => {
+  try {
+    const twilioAccountSid = process.env.ACCOUNT_SID;
+    const twilioApiKey = process.env.API_KEY;
+    const twilioApiSecret = process.env.API_SECRET;
+    const identity = req.body.identity;
 
+    const token = new AccessToken(
+      twilioAccountSid,
+      twilioApiKey,
+      twilioApiSecret,
+      { identity: identity }
+    );
+
+    const videoGrant = new VideoGrant();
+    token.addGrant(videoGrant);
+
+    res.send({
+      token: token.toJwt(),
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+```
+
+<p> The server returns an access token that allows the user to join the twilio video conference room. </p>
+
+```bash
+io.on('connection', socket => {
+  const { roomId } = socket.handshake.query;
+  socket.join(roomId);
+
+  socket.on('newChatMessage', data => {
+    io.in(roomId).emit('newChatMessage', data);
+  });
+
+  socket.on('disconnect', () => {
+    socket.leave(roomId);
+  });
+});
+```
+<p> The server also puts the user's socket into the specific room they requested in order to emit chat messages that other users in the room send </p>
+
+<img src = "assets/chatting.png" />
+<p> In the meeting room, the user has the option of chatting with other users through sending chat messages. </p>
+
+<img src = "assets/hidechat.png" />
+<p> The user also has the option of hiding the chat when they click the chat icon on the bottom row. If the user clicks the leave room button, then they will be sent back the join meeting page. </p>
 
 <!-- ROADMAP -->
 ## Roadmap
 
-See the [open issues](https://github.com/github_username/repo_name/issues) for a list of proposed features (and known issues).
+1. Redesign of the meeting room UI using Adobe Xd mock ups.
+2. Refactoring of the meeting room code for displaying participant video and audio tracks.
+3. Addition of breakout rooms.
 
-
-
-<!-- CONTRIBUTING -->
-## Contributing
-
-Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-
-
-<!-- LICENSE -->
 ## License
 
-Distributed under the MIT License. See `LICENSE` for more information.
+Distributed under the MIT License © [Electron React Boilerplate](https://github.com/electron-react-boilerplate)
 
-
-
-<!-- CONTACT -->
 ## Contact
 
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email
-
-Project Link: [https://github.com/github_username/repo_name](https://github.com/github_username/repo_name)
+<p>Jason Nguyen - jasondn5@uci.edu</p>
+<p>Project Link: https://github.com/jasondnguyen/zoom_clone_electron/</p>
 
 
 
 <!-- ACKNOWLEDGEMENTS -->
 ## Acknowledgements
 
-* []()
-* []()
-* []()
-
-
-
-
+* [Brad Traversy](https://www.udemy.com/course/modern-react-front-to-back/)
+* [Electron-react-boilerplate](https://github.com/electron-react-boilerplate/electron-react-boilerplate)
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
@@ -165,33 +176,3 @@ Project Link: [https://github.com/github_username/repo_name](https://github.com/
 [license-url]: https://github.com/github_username/repo/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/github_username
-
-## Install
-
-- **If you have installation or compilation issues with this project, please see [our debugging guide](https://github.com/electron-react-boilerplate/electron-react-boilerplate/issues/400)**
-
-First, clone the repo via git and install dependencies:
-
-```bash
-git clone --depth 1 --single-branch https://github.com/electron-react-boilerplate/electron-react-boilerplate.git your-project-name
-cd your-project-name
-yarn
-```
-
-## Starting Development
-
-Start the app in the `dev` environment:
-
-```bash
-yarn start
-```
-
-## License
-
-Distributed under the MIT License © [Electron React Boilerplate](https://github.com/electron-react-boilerplate)
-
-## Contact
-
-<p>Jason Nguyen - jasondn5@uci.edu</p>
-<p>Project Link: https://github.com/jasondnguyen/zoom_clone_electron/</p>
-
