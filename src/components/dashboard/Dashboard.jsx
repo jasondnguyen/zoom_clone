@@ -1,12 +1,22 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Grid } from '@material-ui/core';
+import { Grid, Button, makeStyles, createStyles } from '@material-ui/core';
 import UserGreeting from './UserGreeting';
-import { Button } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { signOut } from '../../actions/auth';
 
+const useStyles = makeStyles(() =>
+  createStyles({
+    buttons: {
+      marginTop: '2em',
+      width: '50vw',
+    },
+  })
+);
+
 const Dashboard = ({ user, signOut }) => {
+  const classes = useStyles();
+
   return (
     <>
       <Grid
@@ -25,6 +35,8 @@ const Dashboard = ({ user, signOut }) => {
             component={Link}
             to="/joinmeeting"
             variant="contained"
+            color="primary"
+            className={classes.buttons}
             fullWidth
           >
             Join Meeting
@@ -35,6 +47,7 @@ const Dashboard = ({ user, signOut }) => {
             component={Link}
             variant="contained"
             fullWidth
+            className={classes.buttons}
             onClick={signOut}
           >
             Sign out
