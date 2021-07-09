@@ -1,5 +1,11 @@
 import React, { useEffect, useState, Fragment } from 'react';
-import { TextField, createStyles, makeStyles, Grid } from '@material-ui/core';
+import {
+  TextField,
+  createStyles,
+  makeStyles,
+  Grid,
+  Typography,
+} from '@material-ui/core';
 import { connect } from 'react-redux';
 import useChat from './useChat';
 
@@ -28,12 +34,17 @@ const useStyles = makeStyles(() =>
       wordBreak: 'break-word',
       borderRadius: '8px',
     },
+    name: {
+      marginBottom: '-.5em',
+      marginTop: '.5em',
+    },
   })
 );
-const Chatbox = ({ meetingId }) => {
+const Chatbox = ({ meetingId, room }) => {
   const classes = useStyles();
   const { messages, sendMessage } = useChat(meetingId);
   const [newMessage, setNewMessage] = useState('');
+  const name = room.localParticipant.identity;
 
   const handleMessage = (e) => {
     setNewMessage(e.target.value);
@@ -42,7 +53,7 @@ const Chatbox = ({ meetingId }) => {
   const sendChatMessage = (e) => {
     e.preventDefault();
     if (newMessage !== '') {
-      sendMessage(newMessage);
+      sendMessage(newMessage, name);
       setNewMessage('');
     }
   };
@@ -53,13 +64,31 @@ const Chatbox = ({ meetingId }) => {
         <ol className={classes.chatBox}>
           {messages.map((message, i) =>
             message.ownedByCurrentUser ? (
-              <li key={i} className={classes.sentMessage}>
-                {message.body}
-              </li>
+              <>
+                <Typography
+                  variant="caption"
+                  component="h1"
+                  className={classes.name}
+                >
+                  From {message.body.name}
+                </Typography>
+                <li key={i} className={classes.sentMessage}>
+                  {message.body.message}
+                </li>
+              </>
             ) : (
-              <li key={i} className={classes.receivedMessage}>
-                {message.body}
-              </li>
+              <>
+                <Typography
+                  variant="caption"
+                  component="h1"
+                  className={classes.name}
+                >
+                  From {message.body.name}
+                </Typography>
+                <li key={i} className={classes.receivedMessage}>
+                  {message.body}
+                </li>
+              </>
             )
           )}
         </ol>

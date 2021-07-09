@@ -3,19 +3,10 @@ import ParticipantGrid from './ParticipantGrid';
 import Chatbox from './Chatbox';
 import RoomBottomBar from './RoomBottomBar';
 import { connect } from 'react-redux';
-import { createStyles, makeStyles, Grid } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import { returnToLobby } from '../../actions/meeting';
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    room: {
-      backgroundColor: 'gray',
-    },
-  })
-);
-
 const Room = ({ returnToLobby, room, meetingID }) => {
-  const classes = useStyles();
   const [showChat, setShowChat] = useState(true);
 
   const leaveRoom = () => {
@@ -30,15 +21,22 @@ const Room = ({ returnToLobby, room, meetingID }) => {
 
   return (
     <>
-      <Grid container spacing={0}>
-        <Grid item xs={9} className={classes.room}>
+      <Grid
+        container
+        spacing={0}
+        direction="column"
+        alignItems="center"
+        justify="center"
+        style={{ minHeight: '100vh' }}
+      >
+        <Grid item xs={12}>
           <ParticipantGrid room={room} />
+          {showChat && <Chatbox meetingId={meetingID} room={room} />}
         </Grid>
-        <Grid item xs={3}>
-          {showChat && <Chatbox meetingId={meetingID} />}
+        <Grid item>
+          <RoomBottomBar leaveRoom={leaveRoom} chatView={chatView} />
         </Grid>
       </Grid>
-      <RoomBottomBar leaveRoom={leaveRoom} chatView={chatView} />
     </>
   );
 };
