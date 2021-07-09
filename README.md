@@ -138,12 +138,17 @@ io.on('connection', socket => {
 <img src = "assets/hidechat.png" />
 <p> The user also has the option of hiding the chat when they click the chat icon on the bottom row. If the user clicks the leave room button, then they will be sent back the join meeting page. </p>
 
+<img src = "assets/login.png" />
+<img src = "assets/dashboard.png" />
+<p> Users also have the option of logging into their accounts. Upon successfully logging in, they are brought to their dashboard, where they are greeted and presented with options to log out or join a meeting </p>
+
+<img src = "assets/signup.png" />
+<p> If users do not currently have an account, they are able to register one by inputting their account information and uploading a profile picture </p>
+
 <!-- ROADMAP -->
 ## Roadmap
-
-1. Redesign of the meeting room UI using Adobe Xd mock ups.
-2. Refactoring of the meeting room code for displaying participant video and audio tracks.
-3. Addition of breakout rooms.
+1. Refactoring of the meeting room code for displaying participant video and audio tracks.
+2. Addition of breakout rooms.
 
 ## License
 
